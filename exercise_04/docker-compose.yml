@@ -1,0 +1,21 @@
+services:
+  restaurant-runner:
+    image: myoung34/github-runner:latest
+    container_name: quickbite-restaurant-runner
+    restart: unless-stopped
+    environment:
+      RUNNER_SCOPE: repo
+      REPO_URL: ${REPO_URL:?Set REPO_URL in .env}
+      RUNNER_NAME: quickbite-restaurant-runner
+      RUNNER_TOKEN: ${RUNNER_TOKEN:?Set RUNNER_TOKEN in .env}
+      LABELS: quickbite-restaurant
+      RUNNER_WORKDIR: /tmp/quickbite-restaurant-runner
+      CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner/data
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Keep host and container paths identical for Docker builds launched by jobs.
+      - /tmp/quickbite-restaurant-runner:/tmp/quickbite-restaurant-runner
+      - quickbite-runner-data:/runner/data
+
+volumes:
+  quickbite-runner-data:
